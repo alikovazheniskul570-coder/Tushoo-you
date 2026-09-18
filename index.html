@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Даяндын тушоо тою</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Georgia, "Times New Roman", serif;
+  background: #f7f0df;
+  color: #4b3525;
+  overflow: hidden;
+}
+
+.cover {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background:
+    radial-gradient(circle at center, #fffaf0 0%, #ead9b8 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 1s ease;
+}
+
+.cover.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.cover-content {
+  text-align: center;
+  padding: 25px;
+}
+
+.cover-small {
+  font-size: 17px;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+  color: #8a6a3f;
+}
+
+.envelope {
+  width: 280px;
+  height: 190px;
+  position: relative;
+  margin: 0 auto 25px;
+  cursor: pointer;
+  perspective: 800px;
+}
+
+.envelope-body {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 145px;
+  background: #8b6a3e;
+  border-radius: 5px;
+  box-shadow: 0 12px 30px rgba(70,45,20,.25);
+}
+
+.envelope-body:before,
+.envelope-body:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background: #a48655;
+}
+
+.envelope-body:before {
+  left: 0;
+  clip-path: polygon(0 0, 100% 100%, 0 100%);
+}
+
+.envelope-body:after {
+  right: 0;
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}
+
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 110px;
+  background: #b09361;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top;
+  transition: .8s ease;
+  z-index: 3;
+}
+
+.envelope.open .envelope-flap {
+  transform: rotateX(180deg);
+}
+
+.seal {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  top: 72px;
+  transform: translateX(-50%);
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: #d4af37;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+  box-shadow: 0 5px 15px rgba(0,0,0,.2);
+}
+
+.cover-title {
+  font-size: 27px;
+  color: #5d4025;
+  margin-bottom: 10px;
+}
+
+.cover-hint {
+  color: #866b4a;
+  font-size: 15px;
+}
+
+.main {
+  max-width: 760px;
+  margin: auto;
+  padding-bottom: 50px;
+}
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 30px 20px;
+  background:
+    radial-gradient(circle at top, #fffdf6, #ead9b8);
+}
+
+.ornament {
+  font-size: 30px;
+  color: #b08a42;
+  letter-spacing: 10px;
+  margin-bottom: 25px;
+}
+
+.hero h1 {
+  font-size: 43px;
+  line-height: 1.2;
+  color: #5b3e25;
+  margin-bottom: 15px;
+}
+
+.hero-subtitle {
+  font-size: 19px;
+  color: #876b47;
+  margin-bottom: 25px;
+}
+
+.name {
+  font-size: 30px;
+  color: #a27b32;
+  font-weight: bold;
+}
+
+.section {
+  margin: 25px 15px;
+  padding: 35px 25px;
+  background: rgba(255,252,244,.9);
+  border: 1px solid #d5b978;
+  border-radius: 22px;
+  box-shadow: 0 8px 25px rgba(85,60,30,.08);
+  text-align: center;
+}
+
+.section-title {
+  font-size: 28px;
+  color: #6a4828;
+  margin-bottom: 22px;
+}
+
+.poem {
+  font-size: 21px;
+  line-height: 1.8;
+  color: #59422d;
+  font-style: italic;
+}
+
+.highlight {
+  color: #a27b32;
+  font-weight: bold;
+}
+
+.wish {
+  font-size: 18px;
+  line-height: 1.8;
+  color: #604a35;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.info-card {
+  padding: 22px 12px;
+  border: 1px solid #d7bd87;
+  border-radius: 18px;
+  background: #fbf6e9;
+}
+
+.info-icon {
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+.info-label {
+  font-size: 14px;
+  color: #96764b;
+  margin-bottom: 7px;
+}
+
+.info-value {
+  font-size: 17px;
+  font-weight: bold;
+  color: #543b26;
+}
+
+.invitation {
+  font-size: 20px;
+  line-height: 1.8;
+}
+
+.hosts {
+  font-size: 24px;
+  color: #a27b32;
+  font-weight: bold;
+}
+
+.rsvp-section {
+  background: linear-gradient(145deg, #fffaf0, #efe0bf);
+}
+
+.rsvp-text {
+  font-size: 17px;
+  line-height: 1.7;
+  margin-bottom: 22px;
+}
+
+.rsvp-btn {
+  border: none;
+  cursor: pointer;
+  padding: 17px 38px;
+  border-radius: 50px;
+  background: linear-gradient(135deg, #9d7638, #d4af37);
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  box-shadow: 0 7px 20px rgba(130,90,30,.25);
+  transition: .3s;
+}
+
+.rsvp-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+}
+
+.footer {
+  text-align: center;
+  padding: 30px 20px 50px;
+  color: #806647;
+}
+
+.footer-name {
+  font-size: 21px;
+  margin: 8px 0;
+  color: #5d4025;
+}
+
+@media(max-width:600px) {
+
+  .hero h1 {
+    font-size: 32px;
+  }
+
+  .name {
+    font-size: 27px;
+  }
+
+  .section {
+    padding: 28px 18px;
+  }
+
+  .section-title {
+    font-size: 24px;
+  }
+
+  .poem {
+    font-size: 18px;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .invitation {
+    font-size: 18px;
+  }
+
+  .envelope {
+    width: 250px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- АЧЫЛУУЧУ КОНВЕРТ -->
+<div class="cover" id="cover">
+
+  <div class="cover-content">
+
+    <div class="cover-small">
+      СИЗГЕ ӨЗГӨЧӨ ЧАКЫРУУ БАР
+    </div>
+
+    <div class="envelope" id="envelope">
+
+      <div class="envelope-flap"></div>
+
+      <div class="envelope-body"></div>
+
+      <div class="seal">
+        🤍
+      </div>
+
+    </div>
+
+    <div class="cover-title">
+      Даяндын тушоо тою
+    </div>
+
+    <div class="cover-hint">
+      Ачуу үчүн конвертти басыңыз
+    </div>
+
+  </div>
+
+</div>
+
+
+<main class="main">
+
+<!-- БАШКЫ БЕТ -->
+<section class="hero">
+
+  <div>
+
+    <div class="ornament">
+      ❈ ✦ ❈
+    </div>
+
+    <div class="hero-subtitle">
+      Урматтуу туугандар, жакындар жана достор!
+    </div>
+
+    <h1>
+      Даяндын<br>
+      тушоо тоюна
+      <br>чакырабыз!
+    </h1>
+
+    <div class="ornament">
+      ❈
+    </div>
+
+    <div class="name">
+      👣 ДАЯН 👣
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ЫР САПТАРЫ -->
+<section class="section">
+
+  <h2 class="section-title">
+    Ак тилек менен 🤍
+  </h2>
+
+  <div class="poem">
+
+    Ак тилек куштай конуп колубузга,<br>
+    Ак бата алабыз деп оюбузда.<br>
+    Чын жүрөктөн даам сызып кетиңиздер,<br>
+
+    <span class="highlight">
+      Чакырабыз тушоо тойубузга!
+    </span>
+
+  </div>
+
+</section>
+
+
+<!-- БАЛАГА ТИЛЕК -->
+<section class="section">
+
+  <h2 class="section-title">
+    Даянга арналган ак тилек
+  </h2>
+
+  <div class="wish">
+
+    Алгачкы кадамың ак жол болсун! 🤍<br><br>
+
+    Ар бир баскан кадамың<br>
+    жакшылыкка баштасын.<br>
+
+    Жолуң жарык,<br>
+    келечегиң кең болсун.<br><br>
+
+    Өмүрүң узун,<br>
+    ден соолугуң бекем,<br>
+    ата-энеңдин сыймыгы<br>
+    болуп чоңой!
+
+  </div>
+
+</section>
+
+
+<!-- ИНФОРМАЦИЯ -->
+<section class="section">
+
+  <h2 class="section-title">
+    Тойдун дареги
+  </h2>
+
+  <div class="info-grid">
+
+    <div class="info-card">
+
+      <div class="info-icon">📅</div>
+
+      <div class="info-label">
+        КҮНҮ
+      </div>
+
+      <div class="info-value">
+        25.10.2026
+      </div>
+
+    </div>
+
+
+    <div class="info-card">
+
+      <div class="info-icon">🕔</div>
+
+      <div class="info-label">
+        БАШТАЛУУ УБАКТЫСЫ
+      </div>
+
+      <div class="info-value">
+        17:00
+      </div>
+
+    </div>
+
+
+    <div class="info-card">
+
+      <div class="info-icon">📍</div>
+
+      <div class="info-label">
+        ДАРЕК
+      </div>
+
+      <div class="info-value">
+        Жаңы Муун<br>
+        14/15
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ЧАКЫРУУ -->
+<section class="section">
+
+  <h2 class="section-title">
+    Сизди күтөбүз! 🤍
+  </h2>
+
+  <div class="invitation">
+
+    Даяндын тушоо тоюнун<br>
+    кубанычын сиздер менен<br>
+    бирге бөлүшкүбүз келет.<br><br>
+
+    Ак дасторкондо жүз көрүшүп,<br>
+    ак баталарыңызды алып,<br>
+    жакшы тилектериңиздерге<br>
+    күбө болууну каалайбыз.
+
+  </div>
+
+</section>
+
+
+<!-- КАТЫШАМ -->
+<section class="section rsvp-section">
+
+  <h2 class="section-title">
+    💌 Катышууңузду ырастаңыз
+  </h2>
+
+  <div class="rsvp-text">
+
+    Тойго катыша турган болсоңуз,<br>
+    төмөнкү баскычты басып,<br>
+    бизге кабарлап коюңуз. 🤍
+
+  </div>
+
+  <button class="rsvp-btn" onclick="confirmAttendance()">
+    💌 КАТЫШАМ
+  </button>
+
+</section>
+
+
+<!-- ТОЙ ЭЭЛЕРИ -->
+<section class="section">
+
+  <div class="ornament">
+    ❈ ✦ ❈
+  </div>
+
+  <div style="margin-bottom:12px;">
+    Той ээлери
+  </div>
+
+  <div class="hosts">
+    Мырзабек & Асель
+  </div>
+
+  <div style="margin-top:18px;">
+    Сиздерди чыдамсыздык менен күтөбүз! 🤍
+  </div>
+
+</section>
+
+
+<footer class="footer">
+
+  <div>
+    👣 Даяндын тушоо тоюнда жолугушканча!
+  </div>
+
+  <div class="footer-name">
+    Мырзабек & Асель
+  </div>
+
+</footer>
+
+</main>
+
+
+<script>
+
+const envelope = document.getElementById("envelope");
+const cover = document.getElementById("cover");
+
+envelope.addEventListener("click", function () {
+
+  envelope.classList.add("open");
+
+  setTimeout(function () {
+
+    cover.classList.add("hidden");
+
+    document.body.style.overflow = "auto";
+
+  }, 900);
+
+});
+
+document.body.style.overflow = "hidden";
+
+
+/* КАТЫШАМ БАСЫЛГАНДА WHATSAPP */
+
+function confirmAttendance() {
+
+  const phone = "996703440570";
+
+  const message =
+    "Саламатсызбы! 🤍%0A%0A" +
+    "Даяндын 25.10.2026 күнү саат 17:00дө боло турган тушоо тоюна катышам.%0A%0A" +
+    "Кубанычыңыздарга ортоктош болом! 👣🤍";
+
+  window.open(
+    "https://wa.me/" + phone + "?text=" + message,
+    "_blank"
+  );
+
+}
+
+</script>
+
+</body>
+</html>
